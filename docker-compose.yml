@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: always
+    volumes:
+      - ./rs-initiate.js:/docker-entrypoint-initdb.d/rs-initiate.js
+    ports:
+      - 27017:27017
+    command: ["--replSet", "rs0", "--bind_ip_all"]
