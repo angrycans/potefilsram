@@ -7,7 +7,7 @@ import { connectDB } from "@/lib/mongodb";
 import User from "@/lib/models/user.model";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { signInWithCredentials } from "./app/lib/auth.actions";
-import Google from "next-auth/providers/google";
+import GoogleProvider from "next-auth/providers/google";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
@@ -30,16 +30,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
       },
     }),
-    Google({
-      authorization: {
-        clientId: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        params: {
-          prompt: "consent",
-          access_type: "offline",
-          response_type: "code",
-        },
-      },
+    GoogleProvider({
+      clientId: process.env.GOOGLE_ID,
+      clientSecret: process.env.GOOGLE_SECRET,
+      allowDangerousEmailAccountLinking: true,
     }),
   ],
 });

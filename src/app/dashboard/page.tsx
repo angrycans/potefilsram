@@ -24,7 +24,7 @@ import {
 import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from "@heroicons/react/20/solid";
 
 import { useSession } from "next-auth/react";
-import { signOutClient } from "../lib/auth.actions";
+import { signOutClient } from "@/app/lib/auth.actions";
 
 const products = [
   { name: "Analytics", description: "Get a better understanding of your traffic", href: "#", icon: ChartPieIcon },

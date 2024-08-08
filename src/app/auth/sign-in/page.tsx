@@ -97,13 +97,13 @@ export default function SignInForm() {
     <div className="w-full h-svh lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
       <div className="mx-auto w-full h-full bg-blue-500 hidden lg:block">left-div</div>
       <div className="flex h-full w-full items-center justify-center ">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(async (data) => await onSubmit_nextauth(data))}>
-            <div className="mx-auto grid w-[350px] gap-6">
-              <div className="grid gap-2 text-center">
-                <h1 className="text-3xl font-bold">Login</h1>
-                <p className="text-sm text-muted-foreground">Enter your email below to login to your account</p>
-              </div>
+        <div className="mx-auto grid w-[350px] gap-6">
+          <div className="grid gap-2 text-center">
+            <h1 className="text-3xl font-bold">Login</h1>
+            <p className="text-sm text-muted-foreground">Enter your email below to login to your account</p>
+          </div>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(async (data) => await onSubmit_nextauth(data))}>
               <div className="grid gap-4">
                 <FormField
                   control={form.control}
@@ -141,26 +141,26 @@ export default function SignInForm() {
                 <Button type="submit" disabled={pending} className="w-full">
                   {pending ? "Submitting..." : "Sign In"}
                 </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    console.log("signIn google");
-                    signIn("google");
-                  }}
-                  className="w-full"
-                >
-                  Login with Google
-                </Button>
               </div>
-              <div className="mt-4 text-center text-sm">
-                Don&apos;t have an account?{" "}
-                <Link href="/auth/sign-up" className="underline">
-                  Sign up
-                </Link>
-              </div>
-            </div>
-          </form>
-        </Form>
+            </form>
+          </Form>
+          <Button
+            variant="outline"
+            onClick={() => {
+              console.log("signIn google");
+              signIn("google");
+            }}
+            className="w-full"
+          >
+            Login with Google
+          </Button>
+          <div className="mt-4 text-center text-sm">
+            Don&apos;t have an account?{" "}
+            <Link href="/auth/sign-up" className="underline">
+              Sign up
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
