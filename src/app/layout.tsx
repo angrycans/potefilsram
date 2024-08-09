@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/toaster";
+import { ThemeProvider } from "next-themes";
+import ModalProvider from "@/components/modals/providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,11 +19,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <SessionProvider>
-          {children}
-          <Toaster />
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <ModalProvider>{children}</ModalProvider>
+            <Toaster />
+          </ThemeProvider>
         </SessionProvider>
       </body>
     </html>
