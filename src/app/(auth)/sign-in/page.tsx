@@ -70,29 +70,29 @@ export default function SignInForm() {
     });
   }
 
-  async function onSubmit(values: z.infer<typeof userSignInValidation>) {
-    console.log("SignInForm onSubmit ");
-    setPending(true);
+  // async function onSubmit(values: z.infer<typeof userSignInValidation>) {
+  //   console.log("SignInForm onSubmit ");
+  //   setPending(true);
 
-    const ret = await signInWithCredentials({ email: values.email, password: values.password });
+  //   const ret = await signInWithCredentials({ email: values.email, password: values.password });
 
-    console.log(ret);
-    setPending(false);
-    if (ret.code) {
-      form.reset();
+  //   console.log(ret);
+  //   setPending(false);
+  //   if (ret.code) {
+  //     form.reset();
 
-      toast({
-        title: `${values.email} user sign in success.`,
-        // variant: "default",
-      });
-    } else {
-      toast({
-        title: ret.msg,
-        // description: "Perhaps you signed up with another method?",
-        variant: "destructive",
-      });
-    }
-  }
+  //     toast({
+  //       title: `${values.email} user sign in success.`,
+  //       // variant: "default",
+  //     });
+  //   } else {
+  //     toast({
+  //       title: ret.msg,
+  //       // description: "Perhaps you signed up with another method?",
+  //       variant: "destructive",
+  //     });
+  //   }
+  // }
   return (
     <div className="w-full h-svh lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
       <div className="mx-auto w-full h-full bg-blue-500 hidden lg:block">left-div</div>

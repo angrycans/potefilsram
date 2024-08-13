@@ -30,6 +30,16 @@ export async function signUpWithCredentials({ email, password }: SignUpWithCrede
   console.log("signUpWithCredentials", email, password);
 
   try {
+    // const ret = await signIn("resend", {
+    //   email: email.toLowerCase(),
+    //   redirect: false,
+    //   callbackUrl: "/dashboard",
+    // });
+
+    // console.log("signUpWithCredentials email", ret);
+
+    // return { code: 1, data: { email } };
+
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -72,6 +82,14 @@ export async function signInWithCredentials({ email, password }: SignUpWithCrede
 
       if (passwordIsValid) {
         console.log("user", user);
+        // const signInResult = await signIn("resend", {
+        //   email: email.toLowerCase(),
+        //   redirect: false,
+        //   callbackUrl: "/dashboard",
+        // });
+
+        // console.log("signInResult", signInResult);
+
         await signIn("credentials", { email, redirect: false });
         return { code: 1 };
       }

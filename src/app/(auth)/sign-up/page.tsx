@@ -16,6 +16,7 @@ import { useRef, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
 import { signUpWithCredentials } from "@/app/lib/auth.actions";
+import { signIn } from "@/auth";
 
 export const userSignUpValidation = z
   .object({
@@ -132,7 +133,7 @@ export default function SignUpForm() {
               </div>
               <div className="mt-4 text-center text-sm">
                 Don&apos;t have an account?{" "}
-                <Link href="/auth/sign-in" className="underline">
+                <Link href="/sign-in" className="underline">
                   Sign In
                 </Link>
               </div>
