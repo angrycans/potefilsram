@@ -64,6 +64,7 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
     setIsSidebarExpanded(!isTablet);
   }, [isTablet]);
 
+  console.log("DashboardSidebar");
   return (
     <TooltipProvider delayDuration={0}>
       <div className="sticky top-0 h-full">

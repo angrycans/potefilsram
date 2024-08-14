@@ -27,7 +27,7 @@ export type NavItem = {
 
 export type MainNavItem = NavItem;
 
-export type MarketingConfig = {
+export type HomeConfig = {
   mainNav: MainNavItem[];
 };
 

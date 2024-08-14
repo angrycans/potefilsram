@@ -7,7 +7,7 @@ import { Menu, X } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 import { docsConfig } from "@/config/docs";
-import { marketingConfig } from "@/config/marketing";
+import { homeConfig } from "@/config/home";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { DocsSidebarNav } from "@/components/docs/sidebar-nav";
@@ -25,7 +25,7 @@ export function NavMobile() {
     docs: docsConfig.mainNav,
   };
 
-  const links = (selectedLayout && configMap[selectedLayout]) || marketingConfig.mainNav;
+  const links = (selectedLayout && configMap[selectedLayout]) || homeConfig.mainNav;
 
   // prevent body scroll when modal is open
   useEffect(() => {

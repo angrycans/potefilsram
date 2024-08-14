@@ -6,7 +6,7 @@ import { useSelectedLayoutSegment } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 import { docsConfig } from "@/config/docs";
-import { marketingConfig } from "@/config/marketing";
+import { homeConfig } from "@/config/home";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { useScroll } from "@/hooks/use-scroll";
@@ -34,7 +34,7 @@ export function NavBar({ scroll = false }: NavBarProps) {
     docs: docsConfig.mainNav,
   };
 
-  const links = (selectedLayout && configMap[selectedLayout]) || marketingConfig.mainNav;
+  const links = (selectedLayout && configMap[selectedLayout]) || homeConfig.mainNav;
 
   return (
     <header
