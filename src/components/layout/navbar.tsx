@@ -34,7 +34,9 @@ export function NavBar({ scroll = false }: NavBarProps) {
     docs: docsConfig.mainNav,
   };
 
-  const links = (selectedLayout && configMap[selectedLayout]) || homeConfig.mainNav;
+  const links = (selectedLayout && (configMap as any)[selectedLayout]) || homeConfig.mainNav;
+
+  console.log("NavBar useSession", session);
 
   return (
     <header
@@ -51,7 +53,7 @@ export function NavBar({ scroll = false }: NavBarProps) {
 
           {links && links.length > 0 ? (
             <nav className="hidden gap-6 md:flex">
-              {links.map((item, index) => (
+              {links.map((item: any, index: any) => (
                 <Link
                   key={index}
                   href={item.disabled ? "#" : item.href}

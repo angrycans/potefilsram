@@ -18,7 +18,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { signUpWithCredentials } from "@/app/lib/auth.actions";
 import { signIn } from "@/auth";
 
-export const userSignUpValidation = z
+const userSignUpValidation = z
   .object({
     // name: z.string().min(1, "Username is required").max(50, "Username must be less than 50 characters"),
     email: z.string().min(1, "Email is required").email("Invalid email"),
@@ -34,7 +34,7 @@ export default function SignUpForm() {
   const [pending, setPending] = useState(false);
   const { toast } = useToast();
 
-  const form = useForm<z.infer<typeof userSignUpValidation>>({
+  const form = useForm({
     resolver: zodResolver(userSignUpValidation),
     defaultValues: {
       email: "",
@@ -43,7 +43,7 @@ export default function SignUpForm() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof userSignUpValidation>) {
+  async function onSubmit(values: any) {
     setPending(true);
 
     const ret = await signUpWithCredentials({ email: values.email, password: values.password });

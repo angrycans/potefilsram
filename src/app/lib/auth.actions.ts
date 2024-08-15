@@ -90,7 +90,7 @@ export async function signInWithCredentials({ email, password }: SignUpWithCrede
 
         // console.log("signInResult", signInResult);
 
-        await signIn("credentials", { email, redirect: false });
+        await signIn("credentials", { email, name: user.name, image: user.image, redirect: false });
         return { code: 1 };
       }
     }
@@ -102,5 +102,5 @@ export async function signInWithCredentials({ email, password }: SignUpWithCrede
 }
 
 export async function signOutClient() {
-  await signOut({ redirect: true, redirectTo: "/auth/sign-in" });
+  await signOut({ redirect: true, redirectTo: "/" });
 }

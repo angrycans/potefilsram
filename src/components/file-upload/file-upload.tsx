@@ -64,10 +64,10 @@ export const FileUploader = forwardRef<HTMLDivElement, FileUploaderProps & React
       //  // "image/*": [".jpg", ".jpeg", ".png", ".gif"],
       //  "":[".sa"]
       // },
-      accept = {},
+      accept = { "": [".sa", ".SA"] },
       maxFiles = 1,
-      maxSize = 4 * 1024 * 1024,
-      multiple = true,
+      maxSize = 5 * 1024 * 1024,
+      multiple = false,
     } = dropzoneOptions;
 
     const reSelectAll = maxFiles === 1 ? true : reSelect;

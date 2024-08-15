@@ -25,7 +25,7 @@ export function NavMobile() {
     docs: docsConfig.mainNav,
   };
 
-  const links = (selectedLayout && configMap[selectedLayout]) || homeConfig.mainNav;
+  const links: any = (selectedLayout && (configMap as any)[selectedLayout]) || homeConfig.mainNav;
 
   // prevent body scroll when modal is open
   useEffect(() => {
@@ -57,10 +57,10 @@ export function NavMobile() {
         <ul className="grid divide-y divide-muted">
           {links &&
             links.length > 0 &&
-            links.map(({ title, href }) => (
-              <li key={href} className="py-3">
-                <Link href={href} onClick={() => setOpen(false)} className="flex w-full font-medium capitalize">
-                  {title}
+            links.map((item: any) => (
+              <li key={item.href} className="py-3">
+                <Link href={item.href} onClick={() => setOpen(false)} className="flex w-full font-medium capitalize">
+                  {item.title}
                 </Link>
               </li>
             ))}

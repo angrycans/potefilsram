@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 import { sidebarLinks } from "@/config/dashboard";
 import { DashboardSidebar, MobileSheetSidebar } from "@/components/layout/dashboard-sidebar";

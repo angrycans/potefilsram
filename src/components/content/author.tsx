@@ -5,7 +5,7 @@ import { getBlurDataURL } from "@/lib/utils";
 import BlurImage from "@/components/shared/blur-image";
 
 export default async function Author({ username, imageOnly }: { username: string; imageOnly?: boolean }) {
-  const authors = BLOG_AUTHORS;
+  const authors = BLOG_AUTHORS as any;
   //console.log("BLOG_AUTHORS", BLOG_AUTHORS);
 
   return imageOnly ? (

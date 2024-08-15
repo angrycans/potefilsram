@@ -17,8 +17,7 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-export const userSignInValidation = z.object({
-  // name: z.string().min(1, "Username is required").max(50, "Username must be less than 50 characters"),
+const userSignInValidation = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email"),
   password: z.string().min(1, "Password is required"),
 });
@@ -28,7 +27,7 @@ export default function SignInForm() {
   const { toast } = useToast();
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof userSignInValidation>>({
+  const form = useForm({
     resolver: zodResolver(userSignInValidation),
     defaultValues: {
       email: "",
@@ -36,7 +35,7 @@ export default function SignInForm() {
     },
   });
 
-  async function onSubmit_nextauth(values: z.infer<typeof userSignInValidation>) {
+  async function onSubmit_nextauth(values: any) {
     setPending(true);
     startTransition(async () => {
       try {

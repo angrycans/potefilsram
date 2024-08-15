@@ -11,6 +11,7 @@ import { UploadButton, UploadDropzone } from "@/components/uploadthing/uploadthi
 
 // import { useUploadThing } from "@/components/file-upload/utils/useUploadThing";
 import { model } from "mongoose";
+import { auth } from "@/auth";
 
 // import "@uploadthing/react/styles.css";
 
@@ -26,51 +27,41 @@ export default function DashboardPage() {
   return (
     <>
       <DashboardHeader heading="Dashboard" text={`Current Role : — Change your role in settings.`} />
-      {/* <UploadDropzone
-        className="flex rounded-lg outline-dashed outline-1 outline-white max-w-[420px] h-[280px] flex-col ut-label:text-lg ut-allowed-content:ut-uploading:text-red-300"
-        content={{
-          button(status) {
-            console.log("status", status);
-            //  if (status.ready) return <div>Add .Sa File</div>;
 
-            return "Getting ready...";
-          },
-          allowedContent({ ready, fileTypes, isUploading }) {
-            console.log("fileTypes", fileTypes);
-            if (!ready) return "Checking what you allow";
-            if (isUploading) return "stuff is uploading...";
-            return `Stuff you can upload: .sa`;
-          },
+      <div className="">
+        <div className="mx-auto max-w-2xl px-4 py-1 sm:px-6 sm:py-2 lg:max-w-7xl lg:px-8">
+          <h2 className="text-2xl font-bold tracking-tight text-gray-900">My track data</h2>
 
-          //  uploadIcon: { color: "#a1a1aa" },
-        }}
-        //endpoint="imageUploader"
-        endpoint="saUploader"
-        // onBeforeUploadBegin={(files) => {
-        //   // Preprocess files before uploading (e.g. rename them)
-        //   return files.map((f) => new File([f], "renamed-" + f.name, { type: f.type }));
-        // }}
-        //config={{ mode: "auto" }}
-        onClientUploadComplete={(res) => {
-          // Do something with the response
-          console.log("Files: ", res);
-          console.log("Upload Completed");
-        }}
-        onUploadError={(error: Error) => {
-          console.log("onUploadError error", error);
-          alert(`ERROR! ${error}`);
-        }}
-        onUploadBegin={(name) => {
-          // Do something once upload begins
-          console.log("Uploading: ", name);
-        }}
-        onDrop={(acceptedFiles) => {
-          // Do something with the accepted files
-          console.log("Accepted files: ", acceptedFiles);
-        }}
-      /> */}
-      <div className="flex max-w-[420px] h-[300px] flex-col items-center text-center">
-        <FormFileUploader />
+          <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+            <div className="group relative">
+              <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-7 xl:aspect-w-7">
+                <img
+                  src="https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg"
+                  alt="Front of men&#039;s Basic Tee in black."
+                  className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+                />
+              </div>
+              <div className="mt-4 flex justify-between">
+                <div>
+                  <h3 className="text-sm text-gray-700">
+                    <a href="#">
+                      <span aria-hidden="true" className="absolute inset-0"></span>
+                      Basic Tee
+                    </a>
+                  </h3>
+                  <p className="mt-1 text-sm text-gray-500">Black</p>
+                </div>
+                <p className="text-sm font-medium text-gray-900">$35</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex h-full w-full items-center justify-center">
+        <div className="flex w-[400px] h-[250px] flex-col items-center text-center">
+          <FormFileUploader />
+        </div>
       </div>
 
       {/* <EmptyPlaceholder>

@@ -17,14 +17,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
   session: { strategy: "jwt" },
   debug: process.env.NODE_ENV === "development",
-  adapter: MongooseAdapter(env.DATABASE_URL),
+  //adapter: MongooseAdapter(env.DATABASE_URL),
   providers: [
     Credentials({
-      authorize: async (credentials) => {
+      authorize: async (credentials: any) => {
         try {
           console.log("signin Credentials authorize", credentials);
 
-          return { email: credentials.email };
+          const user = { email: credentials.email, name: credentials.name };
+
+          console.log("signin user", user);
+          return user as any;
         } catch (error) {
           if (error instanceof ZodError) {
             // Return `null` to indicate that the credentials are invalid
@@ -46,10 +49,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     //     // your function
     //   },
     // }),
-    Resend({
-      apiKey: env.RESEND_API_KEY,
-      from: env.EMAIL_FROM,
-      // sendVerificationRequest,
-    }),
+    // Resend({
+    //   apiKey: env.RESEND_API_KEY,
+    //   from: env.EMAIL_FROM,
+    //   // sendVerificationRequest,
+    // }),
   ],
 });

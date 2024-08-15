@@ -1,10 +1,19 @@
 import HeroLanding from "@/components/sections/hero-landing";
-import { useSession } from "next-auth/react";
+import { getCurrentUser } from "@/lib/session";
+import { auth } from "@/auth";
+import { GetServerSidePropsContext } from "next";
 
-export default function IndexHome() {
+// import { useSession } from "next-auth/react";
+
+export default async function IndexHome({}) {
+  const user = await getCurrentUser();
+
+  console.log("IndexHome", user);
+
   // const session = useSession();
 
   // console.log("IndexHome session", session);
+
   return (
     <>
       <HeroLanding />
