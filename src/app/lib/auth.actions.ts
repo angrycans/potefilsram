@@ -96,7 +96,7 @@ export async function signInWithCredentials({ email, password }: SignUpWithCrede
     }
     return { code: 0, msg: "User or Password error!" };
   } catch (error) {
-    //redirect(`/error?error=${(error as Error).message}`);
+    //redirect(`/error?error=${(error as Error).message}`);x
     return { code: 0, msg: (error as Error).message };
   }
 }

@@ -147,7 +147,7 @@ export default function SignInForm() {
             variant="outline"
             onClick={() => {
               console.log("signIn google");
-              signIn("google");
+              signIn("google", { callbackUrl: "/" });
             }}
             className="w-full"
           >

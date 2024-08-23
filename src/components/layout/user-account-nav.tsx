@@ -86,6 +86,7 @@ export function UserAccountNav() {
                 onClick={async (event) => {
                   event.preventDefault();
                   const ret = await signOutClient();
+                  
                   console.log("logout ret", ret);
                   // signOut({
                   //   callbackUrl: `${window.location.origin}/`,
