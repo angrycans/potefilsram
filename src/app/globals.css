@@ -67,3 +67,31 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+.map-wrapper {
+  
+  .mapbox-logo {
+    @apply hidden;
+  }
+
+  .mapboxgl-ctrl-logo {
+    @apply hidden !important;
+  }
+
+  .mapbox-improve-map {
+    @apply hidden;
+  }
+
+  .mapboxgl-ctrl-compass {
+    @apply hidden;
+  }
+
+  .marker {
+    @apply p-1 rounded-sm;
+  }
+
+  .mapboxgl-control-container{
+    @apply hidden !important;
+  }
+}

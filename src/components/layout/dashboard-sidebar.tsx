@@ -27,12 +27,17 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { UpgradeCard } from "@/components/dashboard/upgrade-card";
 import { Icons } from "@/components/shared/icons";
 
+import { useStore } from "@/app/store";
+
 interface DashboardSidebarProps {
   links: SidebarNavItem[];
 }
 
 export function DashboardSidebar({ links }: DashboardSidebarProps) {
   const path = usePathname();
+  const { state, updateState } = useStore();
+
+  const isSidebarExpanded = state.app.DashboardSidebar.isSidebarExpanded;
 
   // NOTE: Use this if you want save in local storage -- Credits: Hosna Qasmei
   //
@@ -54,14 +59,21 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
   // }, [isSidebarExpanded]);
 
   const { isTablet } = useMediaQuery();
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(!isTablet);
+
+  //const [isSidebarExpanded, setIsSidebarExpanded] = useState(!isTablet);
 
   const toggleSidebar = () => {
-    setIsSidebarExpanded(!isSidebarExpanded);
+    //setIsSidebarExpanded(!isSidebarExpanded);
+    updateState((draft) => {
+      draft.app.DashboardSidebar.isSidebarExpanded = !draft.app.DashboardSidebar.isSidebarExpanded;
+    });
   };
 
   useEffect(() => {
-    setIsSidebarExpanded(!isTablet);
+    // setIsSidebarExpanded(!isTablet);
+    updateState((draft) => {
+      draft.app.DashboardSidebar.isSidebarExpanded = !isTablet;
+    });
   }, [isTablet]);
 
   console.log("DashboardSidebar");

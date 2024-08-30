@@ -4,6 +4,8 @@ import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "next-themes";
+import { StoreProvider, useStore } from "@/app/store";
+
 import ModalProvider from "@/components/modals/providers";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -22,12 +24,14 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <SessionProvider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            <ModalProvider>{children}</ModalProvider>
-            <Toaster />
-          </ThemeProvider>
-        </SessionProvider>
+        <StoreProvider>
+          <SessionProvider>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+              <ModalProvider>{children}</ModalProvider>
+              <Toaster />
+            </ThemeProvider>
+          </SessionProvider>
+        </StoreProvider>
       </body>
     </html>
   );
