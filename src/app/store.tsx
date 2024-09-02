@@ -1,4 +1,5 @@
 "use client";
+import { TrackInfo } from "@/components/tracks/hooks";
 import React, { createContext, useState, useContext, ReactNode, useEffect } from "react";
 import { Updater, useImmer } from "use-immer";
 
@@ -7,6 +8,10 @@ export interface StateType {
   app: {
     DashboardSidebar: {
       isSidebarExpanded: boolean;
+    };
+    sa: {
+      Header?: any;
+      trackInfo?: TrackInfo;
     };
   };
 }
@@ -26,6 +31,7 @@ const defaultState: StateType = {
     DashboardSidebar: {
       isSidebarExpanded: true,
     },
+    sa: {},
   },
 };
 

@@ -7,6 +7,7 @@ export type Position = number[]; // [number, number] | [number, number, number];
 const MAX_SPEED_SHAKE_IGNORE = 0.1;
 const MAX_COLOR_DEGREES = 120;
 const MAX_SPEED_SHAKE = 0.001;
+const mph2kmh = 1.609344;
 
 const enum BrakingColor {
   YELLOW = "#FFFF00",
@@ -255,6 +256,7 @@ export function generateSpeedColorGradient1(list: [number, ...string[]][]) {
  */
 export function generateBrakingColorGradient(list: [number, ...string[]][]) {
   const avgSpeed = list.reduce((acc, { 7: speed }) => acc + +speed, 0) / list.length;
+  console.log("avgSpeed", avgSpeed * mph2kmh);
   let prevSpeed = +list[0][7];
   let prevColor = prevSpeed >= avgSpeed ? BrakingColor.GREEN : BrakingColor.RED;
   return list
@@ -339,4 +341,39 @@ export function getLineGeoJSON(coordinates: Position[]) {
       },
     ],
   } as any as GeoJSON.FeatureCollection<GeoJSON.LineString>;
+}
+
+export function subtractTimeStrings(time1: string, time2: string): string {
+  // Convert the time strings to seconds
+  const seconds1 = convertTimeStringToSeconds(time1);
+  const seconds2 = convertTimeStringToSeconds(time2);
+
+  // Subtract the seconds
+  const diff = seconds1 - seconds2;
+
+  // Convert the difference back to a time string
+  return convertSecondsToTimeString(diff);
+}
+
+export function convertTimeStringToSeconds(time: string): number {
+  // Split the time string into minutes and seconds
+  const parts = time.split(":");
+  const minutes = parseInt(parts[0]);
+  const seconds = parseFloat(parts[1]);
+
+  // Convert the minutes to seconds
+  const totalSeconds = minutes * 60 + seconds;
+
+  return totalSeconds;
+}
+
+export function convertSecondsToTimeString(sec: number): string {
+  // Convert the seconds to minutes and seconds
+  const minutes = Math.floor(sec / 60);
+  const seconds = sec % 60;
+
+  // Format the time string
+  const timeString = `${minutes}:${seconds.toFixed(3)}`;
+
+  return timeString;
 }

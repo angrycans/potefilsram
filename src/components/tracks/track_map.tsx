@@ -5,7 +5,7 @@ import mapboxgl from "mapbox-gl"; // or "const mapboxgl = require('mapbox-gl');"
 import "mapbox-gl/dist/mapbox-gl.css";
 import { chunk } from "lodash";
 
-import { parseData, RecordDataInfo, useGetData } from "./hooks";
+import { parseData, TrackInfo, useGetTrackData } from "./hooks";
 import { fetcher } from "@/lib/utils";
 import {
   generateSpeedColorGradient,
@@ -28,10 +28,9 @@ const colorGradientGeneratorMap: Record<string, (list: [number, ...string[]][]) 
 export function TrackMap({ className }: React.HTMLAttributes<HTMLElement>) {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
-  const [dataInfo, setDataInfo] = useState<RecordDataInfo | null>(null);
   const { state } = useStore();
 
-  const { data, racetrack } = useGetData("3");
+  const _ = useGetTrackData();
 
   useEffect(() => {
     console.log("state.app.DashboardSidebar.isSidebarExpanded", state.app.DashboardSidebar.isSidebarExpanded);
@@ -69,6 +68,8 @@ export function TrackMap({ className }: React.HTMLAttributes<HTMLElement>) {
     console.log("TrackMap init");
     let currentMarkers: mapboxgl.Marker[] | null = null;
 
+    const trackInfo = state.app.sa.trackInfo;
+
     if (!mapRef.current) {
       const map = new mapboxgl.Map({
         container: mapContainerRef.current as any,
@@ -98,15 +99,15 @@ export function TrackMap({ className }: React.HTMLAttributes<HTMLElement>) {
       mapRef.current = map as any;
     }
 
-    console.log("TrackMap getData", data);
+    console.log("TrackMap trackinfo", trackInfo);
 
-    if (data) {
+    if (trackInfo?.data) {
       const SOURCE_LINE_ID = "source-line";
       const LAYER_LINE_ID = "layer-line";
       const SOURCE_RACETRACK_ID = "source-racetrack";
       const LAYER_RACETRACK_ID = "layer-racetrack";
-      const locations = data.map((item) => item.slice(1, 3).reverse()) as [number, number][];
-      const { colorGradientData, markers } = colorGradientGeneratorMap[1](data);
+      const locations = trackInfo.data.map((item: any[]) => item.slice(1, 3).reverse()) as [number, number][];
+      const { colorGradientData, markers } = colorGradientGeneratorMap[2](trackInfo.data);
 
       (mapRef.current! as any).addSource(SOURCE_LINE_ID, {
         type: "geojson",
@@ -117,7 +118,7 @@ export function TrackMap({ className }: React.HTMLAttributes<HTMLElement>) {
       (mapRef.current! as any).addSource(SOURCE_RACETRACK_ID, {
         type: "geojson",
         lineMetrics: true,
-        data: getLineGeoJSON(chunk(racetrack, 2).map((location: any[]) => location.reverse())),
+        data: getLineGeoJSON(chunk(trackInfo.trackplan, 2).map((location: any[]) => location.reverse())),
       });
 
       // (mapRef.current! as any).addLayer({
@@ -159,12 +160,12 @@ export function TrackMap({ className }: React.HTMLAttributes<HTMLElement>) {
         LAYER_RACETRACK_ID
       );
 
-      markers.forEach((marker) => {
-        marker.addTo(mapRef.current!);
-      });
-      currentMarkers = markers;
+      // markers.forEach((marker) => {
+      //   marker.addTo(mapRef.current!);
+      // });
+      // currentMarkers = markers;
     }
-  }, [data]);
+  }, [state.app.sa.trackInfo]);
 
   return (
     <>

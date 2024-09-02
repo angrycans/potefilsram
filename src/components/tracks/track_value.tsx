@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   CartesianGrid,
   Line,
@@ -18,6 +18,7 @@ import {
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { useStore } from "@/app/store";
 const chartData = [
   { date: "2024-04-01", desktop: 222, mobile: 150 },
   { date: "2024-04-02", desktop: 97, mobile: 180 },
@@ -188,6 +189,7 @@ export function TrackValue2({ className }: React.HTMLAttributes<HTMLElement>) {
 
 export function TrackValue({ className }: React.HTMLAttributes<HTMLElement>) {
   const [activeChart, setActiveChart] = React.useState<keyof typeof chartConfig>("desktop");
+  const { state } = useStore();
 
   const total = React.useMemo(
     () => ({
@@ -196,6 +198,12 @@ export function TrackValue({ className }: React.HTMLAttributes<HTMLElement>) {
     }),
     []
   );
+
+  useEffect(() => {
+    console.log("TrackValue init");
+
+    const trackInfo = state.app.sa.trackInfo;
+  }, [state.app.sa.trackInfo]);
 
   return (
     <Card>

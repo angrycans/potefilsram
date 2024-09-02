@@ -31,11 +31,13 @@ import {
   Trash,
   User,
   X,
+  ChartNoAxesColumn,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
 
 export const Icons = {
+  chartNoAxesColumn: ChartNoAxesColumn,
   add: Plus,
   arrowRight: ArrowRight,
   arrowUpRight: ArrowUpRight,
