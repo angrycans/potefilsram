@@ -8,6 +8,7 @@ const MAX_SPEED_SHAKE_IGNORE = 0.1;
 const MAX_COLOR_DEGREES = 120;
 const MAX_SPEED_SHAKE = 0.001;
 const mph2kmh = 1.609344;
+const gv = 0.01875;
 
 const enum BrakingColor {
   YELLOW = "#FFFF00",

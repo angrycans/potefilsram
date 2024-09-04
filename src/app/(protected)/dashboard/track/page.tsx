@@ -23,17 +23,17 @@ export default function TrackPage() {
         </div>
       </Panel>
       <PanelResizeHandle />
-      <Panel className="h-full w-full bg-red-500" defaultSize={75}>
+      <Panel className="h-full w-full" defaultSize={75}>
         <PanelGroup autoSaveId="example" direction="vertical">
           <Panel defaultSize={40} className="block md:hidden h-full w-full">
             <div className=" h-full bg-gray-500">a</div>
           </Panel>
           <PanelResizeHandle className="block md:hidden" />
-          <Panel defaultSize={60}>
+          <Panel defaultSize={50}>
             <TrackMap />
           </Panel>
           <PanelResizeHandle />
-          <Panel defaultSize={40}>
+          <Panel defaultSize={50}>
             <TrackValue />
           </Panel>
         </PanelGroup>
