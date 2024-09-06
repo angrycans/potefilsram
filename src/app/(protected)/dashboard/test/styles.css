@@ -1,0 +1,18 @@
+body {
+    font-family: sans-serif;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .app-container {
+    width: 600px;
+    height: 500px;
+  }
+  .graph-wrapper {
+    overflow-x: auto;
+    overflow-y: hidden;
+    background-color: red;
+  }
+  
