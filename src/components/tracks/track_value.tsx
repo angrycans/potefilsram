@@ -7,6 +7,7 @@ import { Slider } from "@/components/ui/slider";
 import useSize from "@/hooks/use-size";
 
 import ReactECharts from "echarts-for-react";
+import { LucideTimer } from "lucide-react";
 
 interface DataItem {
   name: string;
@@ -14,6 +15,7 @@ interface DataItem {
 }
 
 const gv = 0.01875;
+const sv = 1.609344;
 
 function convertMsToMinSecMs(milliseconds: number): string {
   const minutes = Math.floor(milliseconds / 60000);
@@ -44,61 +46,114 @@ export function TrackValue({ className }: React.HTMLAttributes<HTMLElement>) {
   const [option, setOption] = useState();
   const [progress, setProgress] = useState(0);
 
-  let data: DataItem[] = [];
-  let now = new Date(1997, 9, 3);
-  let oneDay = 24 * 3600 * 1000;
-  let value = Math.random() * 1000;
-
-  function randomData(): DataItem {
-    now = new Date(+now + oneDay);
-    value = value + Math.random() * 21 - 10;
-    return {
-      name: now.toString(),
-      value: [[now.getFullYear(), now.getMonth() + 1, now.getDate()].join("/"), Math.round(value)],
-    };
-  }
-  for (var i = 0; i < 1000; i++) {
-    data.push(randomData());
-  }
-
   useEffect(() => {
     console.log("TrackValue useEffect", state.app.sa.trackInfo);
 
     const trackInfo = state.app.sa.trackInfo;
 
     if (state.app.sa.trackInfo?.data) {
-      const _chartData = state.app.sa.trackInfo.data.slice(0, 100).map((item, idx) => {
-        return { timer: idx * 10 + "", speed: item[7], acc: (parseInt(item[5]) * gv).toFixed(3), accv: item[5] };
+      const _chartData = state.app.sa.trackInfo.data.slice(0, 1000).map((item: any, idx: any) => {
+        return {
+          timer: idx * 10 + "",
+          speed: (item[7] * sv).toFixed(0),
+          acc: (parseInt(item[5]) * gv).toFixed(3),
+          accv: item[5],
+        };
+
+        //return [idx * 10 + "", item[7], (parseInt(item[5]) * gv).toFixed(3)];
       });
 
       // setChartData(_chartData);
 
       console.log("TrackValue chartData", _chartData);
-      const timerData = _chartData.map((item) => item.timer);
-      const speedData = _chartData.map((item) => item.speed);
+      // const timerData = _chartData.map((item) => item.timer);
+      // const speedData = _chartData.map((item) => item.speed);
 
       setOption({
         title: {
           text: "Speed Over Time",
         },
+        dataset: {
+          dimensions: ["timer", "speed", "acc", "accv"],
+          source: _chartData,
+        },
         tooltip: {
           trigger: "axis",
         },
+        dataZoom: [
+          {
+            type: "inside",
+            startValue: 0,
+            endValue: 100,
+            zoomLock: true,
+          },
+        ],
         xAxis: {
           type: "category",
-          data: timerData,
-          name: "Time",
+          position: "top",
+          axisTick: {
+            interval: 4,
+            length: 5,
+            alignWithLabel: true,
+            inside: true,
+          },
+          axisLine: {
+            onZero: false,
+          },
+          axisLabel: {
+            interval: 4,
+            margin: 10,
+            rotate: 45,
+            inside: false,
+            formatter: function (value: any, index: any) {
+              return convertMsToMinSecMs(value);
+            },
+          },
+          filterMode: "none",
+          //  data: timerData,
+          // name: "timer",
         },
-        yAxis: {
-          type: "value",
-          name: "Speed",
-        },
+        yAxis: [
+          {
+            type: "value",
+            //name: "speed",
+            position: "left",
+            filterMode: "none",
+            min: 0,
+            max: 150,
+          },
+          {
+            type: "value",
+            position: "right",
+            filterMode: "none",
+            splitNumber: 7,
+            min: -1.5,
+            max: 1.5,
+            splitLine: {
+              show: false,
+            },
+            //name: "speed",
+          },
+        ],
+
         series: [
           {
-            name: "Speed",
-            data: speedData,
+            name: "speed",
             type: "line",
-            smooth: true, // Makes the line smooth
+            yAxisIndex: 0,
+            encode: {
+              x: "timer",
+              y: "speed",
+            },
+          },
+          {
+            name: "acc",
+            type: "line",
+            yAxisIndex: 1,
+            encode: {
+              x: "timer",
+              y: "acc",
+            },
           },
         ],
       });

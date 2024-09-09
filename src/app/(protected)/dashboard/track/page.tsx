@@ -3,8 +3,6 @@
 import { constructMetadata } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { LineChartMultiple } from "@/components/charts/line-chart-multiple";
-
 import { DashboardHeader } from "@/components/dashboard/header";
 import { useState } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";

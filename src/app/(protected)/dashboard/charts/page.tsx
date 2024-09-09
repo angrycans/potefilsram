@@ -1,8 +1,6 @@
 import { constructMetadata } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { LineChartMultiple } from "@/components/charts/line-chart-multiple";
-
 import { DashboardHeader } from "@/components/dashboard/header";
 import { useState } from "react";
 
@@ -16,9 +14,7 @@ export default function ChartsPage() {
     <>
       <DashboardHeader heading="Track" text="track data" />
 
-      <div className="grid grid-cols-1 gap-4">
-        <LineChartMultiple />
-      </div>
+      <div className="grid grid-cols-1 gap-4"></div>
     </>
   );
 }
