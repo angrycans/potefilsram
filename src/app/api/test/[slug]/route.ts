@@ -6,5 +6,5 @@ export async function GET(request: Request, { params }: { params: { slug: string
   console.log("req", request);
   console.log("params", params);
 
-  return new Response("User deleted successfully! id", { status: 200 });
+  return new Response("User deleted successfully! id=" + slug, { status: 200 });
 }

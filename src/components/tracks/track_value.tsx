@@ -43,7 +43,7 @@ export function TrackValue({ className }: React.HTMLAttributes<HTMLElement>) {
   const lineChartRefSize = useSize(lineChartRef);
 
   const [chartData, setChartData] = useState([] as any);
-  const [option, setOption] = useState();
+  const [option, setOption] = useState({} as any);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {

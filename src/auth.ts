@@ -42,6 +42,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       clientSecret: process.env.GOOGLE_SECRET,
       allowDangerousEmailAccountLinking: true,
     }),
+
     // Resend({
     //   server: process.env.EMAIL_SERVER,
     //   from: process.env.EMAIL_FROM,
@@ -55,4 +56,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     //   // sendVerificationRequest,
     // }),
   ],
+  callbacks: {
+    authorized: async ({ auth }) => {
+      // Logged in users are authenticated, otherwise redirect to login page
+      console.log("callbacks authorized", auth);
+      return !!auth;
+    },
+  },
 });
