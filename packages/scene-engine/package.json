@@ -1,0 +1,19 @@
+{
+  "name": "@marslife/scene-engine",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "files": ["src", "dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@babylonjs/core": "^7.40.2",
+    "@marslife/shared-schema": "file:../shared-schema"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}
