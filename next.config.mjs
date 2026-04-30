@@ -4,6 +4,7 @@ import("./src/env.mjs");
 
 /** @type {import("next").NextConfig} */
 const nextConfig = {
+  allowedDevOrigins: ['127.0.0.1'],
     reactStrictMode: true,
     pageExtensions: ["tsx", "mdx", "ts", "js"],
     images: {

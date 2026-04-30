@@ -1,102 +1,44 @@
 "use server";
-import { redirect } from "next/navigation";
 import * as bcrypt from "bcrypt-ts";
-import { connectDB } from "@/lib/mongodb";
-import User from "@/lib/models/user.model";
-import { sign } from "crypto";
 import { signIn, signOut } from "@/auth";
-// import { signOut } from "next-auth/react";
+import { createUser, getUserByEmail } from "@/lib/user-store";
 
 export interface SignUpWithCredentialsParams {
   email: string;
   password: string;
 }
-
-/*
-  const userSchema = new mongoose.Schema({
-  name: { type: String },
-  email: { type: String, unique: true },
-  emailVerified: { type: Date },
-  image: { type: String },
-  accounts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Account" }],
-  sessions: [{ type: mongoose.Schema.Types.ObjectId, ref: "Session" }],
-  authenticators: [{ type: mongoose.Schema.Types.ObjectId, ref: "Authenticator" }],
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
-});
-
-  */
 export async function signUpWithCredentials({ email, password }: SignUpWithCredentialsParams) {
-  console.log("signUpWithCredentials", email, password);
-
   try {
-    // const ret = await signIn("resend", {
-    //   email: email.toLowerCase(),
-    //   redirect: false,
-    //   callbackUrl: "/dashboard",
-    // });
-
-    // console.log("signUpWithCredentials email", ret);
-
-    // return { code: 1, data: { email } };
-
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-
-    const newUser = new User({
+    const user = await createUser({
       email,
-      password: hashedPassword,
+      passwordHash: hashedPassword,
     });
-    console.log({ newUser });
-    connectDB();
 
-    const user = await User.findOne({ email });
-
-    if (user) {
-      throw new Error("User already exists.");
-    }
-
-    await newUser.save();
-
-    return { code: 1, data: { email: newUser.email } };
+    return { code: 1, data: { email: user.email } };
   } catch (error) {
-    //redirect(`/error?error=${(error as Error).message}`);
     return { code: 0, msg: (error as Error).message };
   }
 }
 
 export async function signInWithCredentials({ email, password }: SignUpWithCredentialsParams) {
-  console.log("signInWithCredentials", email, password);
-
   try {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const user = await getUserByEmail(email);
 
-    connectDB();
-
-    const user = await User.findOne({ email });
-
-    if (user) {
-      const passwordIsValid = await bcrypt.compare(password, user.password);
-      console.log("passwordIsValid", passwordIsValid);
-
-      if (passwordIsValid) {
-        console.log("user", user);
-        // const signInResult = await signIn("resend", {
-        //   email: email.toLowerCase(),
-        //   redirect: false,
-        //   callbackUrl: "/dashboard",
-        // });
-
-        // console.log("signInResult", signInResult);
-
-        await signIn("credentials", { email, name: user.name, image: user.image, redirect: false });
-        return { code: 1 };
-      }
+    if (!user?.passwordHash) {
+      return { code: 0, msg: "User or Password error!" };
     }
-    return { code: 0, msg: "User or Password error!" };
+
+    const passwordIsValid = await bcrypt.compare(password, user.passwordHash);
+
+    if (!passwordIsValid) {
+      return { code: 0, msg: "User or Password error!" };
+    }
+
+    await signIn("credentials", { email: user.email, password, redirect: false });
+    return { code: 1 };
   } catch (error) {
-    //redirect(`/error?error=${(error as Error).message}`);x
     return { code: 0, msg: (error as Error).message };
   }
 }

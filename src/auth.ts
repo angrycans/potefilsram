@@ -1,39 +1,50 @@
 import NextAuth from "next-auth";
 import { ZodError } from "zod";
 import Credentials from "next-auth/providers/credentials";
-import type { PrismaClient, Prisma } from "@prisma/client";
-import type { Adapter, AdapterAccount, AdapterSession, AdapterUser } from "@auth/core/adapters";
-import { connectDB } from "@/lib/mongodb";
-import User from "@/lib/models/user.model";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import { signInWithCredentials } from "./app/lib/auth.actions";
 import GoogleProvider from "next-auth/providers/google";
-import Resend from "next-auth/providers/resend";
-import { env } from "@/env.mjs";
-import { Provider } from "@radix-ui/react-toast";
-import { MongooseAdapter } from "@brendon1555/authjs-mongoose-adapter";
+import * as bcrypt from "bcrypt-ts";
+import { getUserByEmail, upsertOAuthUser } from "@/lib/user-store";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET,
   session: { strategy: "jwt" },
   debug: process.env.NODE_ENV === "development",
-  //adapter: MongooseAdapter(env.DATABASE_URL),
   providers: [
     Credentials({
       authorize: async (credentials: any) => {
         try {
-          console.log("signin Credentials authorize", credentials);
+          const email = credentials?.email;
+          const password = credentials?.password;
 
-          const user = { email: credentials.email, name: credentials.name };
-
-          console.log("signin user", user);
-          return user as any;
-        } catch (error) {
-          if (error instanceof ZodError) {
-            // Return `null` to indicate that the credentials are invalid
-
+          if (!email || !password) {
             return null;
           }
+
+          const user = await getUserByEmail(email);
+
+          if (!user?.passwordHash) {
+            return null;
+          }
+
+          const passwordIsValid = await bcrypt.compare(password, user.passwordHash);
+
+          if (!passwordIsValid) {
+            return null;
+          }
+
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            image: user.image,
+            role: user.role,
+          } as any;
+        } catch (error) {
+          if (error instanceof ZodError) {
+            return null;
+          }
+
+          return null;
         }
       },
     }),
@@ -57,9 +68,42 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     // }),
   ],
   callbacks: {
+    signIn: async ({ user, account }) => {
+      if (account?.provider === "google" && user.email) {
+        const storedUser = await upsertOAuthUser({
+          email: user.email,
+          name: user.name,
+          image: user.image,
+          emailVerified: new Date().toISOString(),
+        });
+
+        user.id = storedUser.id;
+        (user as any).role = storedUser.role;
+      }
+
+      return true;
+    },
+    jwt: async ({ token, user }) => {
+      if (user) {
+        token.sub = user.id;
+        token.role = ((user as any).role ?? token.role ?? "USER") as any;
+      }
+
+      if (!token.role && token.email) {
+        const storedUser = await getUserByEmail(token.email);
+        token.role = storedUser?.role ?? "USER";
+      }
+
+      return token;
+    },
+    session: async ({ session, token }) => {
+      if (session.user) {
+        session.user.role = (token.role ?? "USER") as any;
+      }
+
+      return session;
+    },
     authorized: async ({ auth }) => {
-      // Logged in users are authenticated, otherwise redirect to login page
-      console.log("callbacks authorized", auth);
       return !!auth;
     },
   },

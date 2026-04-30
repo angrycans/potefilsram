@@ -3,9 +3,7 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardFooter, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import * as z from "zod";
 import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,12 +20,14 @@ const userSignInValidation = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
+type SignInFormValues = z.infer<typeof userSignInValidation>;
+
 export default function SignInForm() {
   const [pending, setPending] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
 
-  const form = useForm({
+  const form = useForm<SignInFormValues>({
     resolver: zodResolver(userSignInValidation),
     defaultValues: {
       email: "",
@@ -35,7 +35,7 @@ export default function SignInForm() {
     },
   });
 
-  async function onSubmit_nextauth(values: any) {
+  async function onSubmitNextAuth(values: SignInFormValues) {
     setPending(true);
     startTransition(async () => {
       try {
@@ -102,7 +102,7 @@ export default function SignInForm() {
             <p className="text-sm text-muted-foreground">Enter your email below to login to your account</p>
           </div>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(async (data) => await onSubmit_nextauth(data))}>
+            <form onSubmit={form.handleSubmit(onSubmitNextAuth)}>
               <div className="grid gap-4">
                 <FormField
                   control={form.control}
@@ -146,7 +146,6 @@ export default function SignInForm() {
           <Button
             variant="outline"
             onClick={() => {
-              console.log("signIn google");
               signIn("google", { callbackUrl: "/" });
             }}
             className="w-full"

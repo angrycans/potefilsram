@@ -8,7 +8,6 @@ const MAX_SPEED_SHAKE_IGNORE = 0.1;
 const MAX_COLOR_DEGREES = 120;
 const MAX_SPEED_SHAKE = 0.001;
 const mph2kmh = 1.609344;
-const gv = 0.01875;
 
 const enum BrakingColor {
   YELLOW = "#FFFF00",
@@ -333,15 +332,14 @@ export function getLineGeoJSON(coordinates: Position[]) {
     features: [
       {
         type: "Feature",
+        properties: {},
         geometry: {
           type: "LineString",
-          // @ts-ignore
-          properties: {},
           coordinates: coordinates,
         },
       },
     ],
-  } as any as GeoJSON.FeatureCollection<GeoJSON.LineString>;
+  } satisfies GeoJSON.FeatureCollection<GeoJSON.LineString>;
 }
 
 export function subtractTimeStrings(time1: string, time2: string): string {

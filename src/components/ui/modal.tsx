@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction } from "react";
 // import { useRouter } from "next/router";
 import { Drawer } from "vaul";
 
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 
@@ -16,6 +16,8 @@ interface ModalProps {
   onClose?: () => void;
   desktopOnly?: boolean;
   preventDefaultClose?: boolean;
+  title?: string;
+  description?: string;
 }
 
 export function Modal({
@@ -26,6 +28,8 @@ export function Modal({
   onClose,
   desktopOnly,
   preventDefaultClose,
+  title,
+  description,
 }: ModalProps) {
   // const router = useRouter();
 
@@ -89,6 +93,8 @@ export function Modal({
         onCloseAutoFocus={(e) => e.preventDefault()}
         className={cn("overflow-hidden p-0 md:max-w-md md:rounded-2xl md:border", className)}
       >
+        {title ? <DialogTitle className="sr-only">{title}</DialogTitle> : null}
+        {description ? <DialogDescription className="sr-only">{description}</DialogDescription> : null}
         {children}
       </DialogContent>
     </Dialog>

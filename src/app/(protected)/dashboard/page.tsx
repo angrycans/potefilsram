@@ -1,29 +1,10 @@
 "use client";
 
-import { getCurrentUser } from "@/lib/session";
-import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import { DashboardHeader } from "@/components/dashboard/header";
-import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 import { FormFileUploader } from "@/components/file-upload/file-uploader";
-import { useSession } from "next-auth/react";
-
-import { UploadButton, UploadDropzone } from "@/components/uploadthing/uploadthinger";
-
-// import { useUploadThing } from "@/components/file-upload/utils/useUploadThing";
-import { model } from "mongoose";
-import { auth } from "@/auth";
-
-// import "@uploadthing/react/styles.css";
 
 export default function DashboardPage() {
-  const session = useSession();
-
-  console.log("DashboardPage session", session);
-
-  // const user = await getCurrentUser();
-
-  // console.log("currentuser", user);
-
   return (
     <>
       <DashboardHeader heading="Dashboard" text={`Current Role : — Change your role in settings.`} />
@@ -35,9 +16,11 @@ export default function DashboardPage() {
           <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
             <div className="group relative">
               <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-7 xl:aspect-w-7">
-                <img
+                <Image
                   src="https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg"
                   alt="Front of men&#039;s Basic Tee in black."
+                  width={800}
+                  height={800}
                   className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                 />
               </div>
@@ -63,15 +46,6 @@ export default function DashboardPage() {
           <FormFileUploader />
         </div>
       </div>
-
-      {/* <EmptyPlaceholder>
-        <EmptyPlaceholder.Icon name="post" />
-        <EmptyPlaceholder.Title>No content created</EmptyPlaceholder.Title>
-        <EmptyPlaceholder.Description>
-          You don&apos;t have any content yet. Start creating content.
-        </EmptyPlaceholder.Description>
-        <Button>Add Content</Button>
-      </EmptyPlaceholder> */}
     </>
   );
 }

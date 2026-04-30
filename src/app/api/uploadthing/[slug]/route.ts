@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-export async function GET(request: Request, { params }: { params: { slug: string } }) {
-  const slug = params.slug; // 'a', 'b', or 'c'
+export async function GET(request: Request, { params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
 
   try {
     // Fetch the array buffer from the external URL
@@ -21,11 +21,11 @@ export async function GET(request: Request, { params }: { params: { slug: string
     const text = decoder.decode(buffer);
 
     // Return the decoded text as JSON
-    return NextResponse.json({ code: 1, data: text }, { status: 200 });
+    return NextResponse.json({ code: 1, data: text, slug }, { status: 200 });
   } catch (error) {
     console.error("Error fetching or decoding the file:", error);
 
     // Return an error response in case of an exception
-    return NextResponse.json({ code: 0, error: "Error decoding text" }, { status: 500 });
+    return NextResponse.json({ code: 0, error: "Error decoding text", slug }, { status: 500 });
   }
 }

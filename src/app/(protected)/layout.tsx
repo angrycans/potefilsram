@@ -1,6 +1,3 @@
-import { redirect } from "next/navigation";
-import { useSession } from "next-auth/react";
-
 import { sidebarLinks } from "@/config/dashboard";
 import { DashboardSidebar, MobileSheetSidebar } from "@/components/layout/dashboard-sidebar";
 import { ModeToggle } from "@/components/layout/mode-toggle";
@@ -12,13 +9,9 @@ interface ProtectedLayoutProps {
 }
 
 export default function Dashboard({ children }: ProtectedLayoutProps) {
-  // const user = await getCurrentUser();
-
-  // if (!user) redirect("/login");
-
   const filteredLinks = sidebarLinks.map((section) => ({
     ...section,
-    items: section.items.filter(({ authorizeOnly }) => !authorizeOnly || authorizeOnly === "user.role"),
+    items: section.items,
   }));
 
   console.log("Dashboard filteredLinks", filteredLinks);

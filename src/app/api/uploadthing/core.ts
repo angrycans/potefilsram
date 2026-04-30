@@ -5,6 +5,10 @@ import { UploadThingError } from "uploadthing/server";
 
 const f = createUploadthing();
 
+type UploadthingFileLike = {
+  name: string;
+};
+
 //FileRouterInputConfig;
 
 // FileRouter for your app, can contain multiple FileRoutes
@@ -17,8 +21,10 @@ export const ourFileRouter = {
   })
     .middleware(async (data) => {
       // This code runs on your server before upload
-      console.log("middleware", data.files[0].name);
-      if (!(data.files[0] as any).name.endsWith(".sa")) {
+      const [file] = data.files as readonly UploadthingFileLike[];
+
+      console.log("middleware", file.name);
+      if (!file.name.endsWith(".sa")) {
         throw new UploadThingError("File suffix must be .sa");
       }
 

@@ -3,20 +3,16 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardFooter, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { useFormStatus } from "react-dom";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
 import { signUpWithCredentials } from "@/app/lib/auth.actions";
-import { signIn } from "@/auth";
 
 const userSignUpValidation = z
   .object({
@@ -30,11 +26,13 @@ const userSignUpValidation = z
     message: "Password do not match",
   });
 
+type SignUpFormValues = z.infer<typeof userSignUpValidation>;
+
 export default function SignUpForm() {
   const [pending, setPending] = useState(false);
   const { toast } = useToast();
 
-  const form = useForm({
+  const form = useForm<SignUpFormValues>({
     resolver: zodResolver(userSignUpValidation),
     defaultValues: {
       email: "",
@@ -43,12 +41,11 @@ export default function SignUpForm() {
     },
   });
 
-  async function onSubmit(values: any) {
+  async function onSubmit(values: SignUpFormValues) {
     setPending(true);
 
     const ret = await signUpWithCredentials({ email: values.email, password: values.password });
 
-    console.log(ret);
     setPending(false);
     if (ret.code) {
       form.reset();
@@ -78,7 +75,7 @@ export default function SignUpForm() {
     <div className="w-full h-svh ">
       <div className="flex h-full w-full items-center justify-center ">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(async (data) => await onSubmit(data))}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="mx-auto grid w-[350px] gap-6">
               <div className="grid gap-2 text-center">
                 <h1 className="text-3xl font-bold">Sign Up</h1>

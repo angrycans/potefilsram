@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { LayoutDashboard, Lock, LogOut, Settings } from "lucide-react";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { Drawer } from "vaul";
 
 import { useMediaQuery } from "@/hooks/use-media-query";
@@ -86,7 +86,7 @@ export function UserAccountNav() {
                 onClick={async (event) => {
                   event.preventDefault();
                   const ret = await signOutClient();
-                  
+
                   console.log("logout ret", ret);
                   // signOut({
                   //   callbackUrl: `${window.location.origin}/`,

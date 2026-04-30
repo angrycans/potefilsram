@@ -1,6 +1,6 @@
-import { UserRole } from "@prisma/client";
 import { User } from "next-auth";
 import { JWT } from "next-auth/jwt";
+import type { UserRole } from "@/types";
 
 export type ExtendedUser = User & {
   role: UserRole;
