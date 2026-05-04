@@ -13,6 +13,7 @@ import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
 import { signUpWithCredentials } from "@/app/lib/auth.actions";
+import { useRouter } from "next/navigation";
 
 const userSignUpValidation = z
   .object({
@@ -31,6 +32,7 @@ type SignUpFormValues = z.infer<typeof userSignUpValidation>;
 export default function SignUpForm() {
   const [pending, setPending] = useState(false);
   const { toast } = useToast();
+  const router = useRouter();
 
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(userSignUpValidation),
@@ -44,32 +46,26 @@ export default function SignUpForm() {
   async function onSubmit(values: SignUpFormValues) {
     setPending(true);
 
-    const ret = await signUpWithCredentials({ email: values.email, password: values.password });
+    try {
+      const ret = await signUpWithCredentials({ email: values.email, password: values.password });
 
-    setPending(false);
-    if (ret.code) {
-      form.reset();
+      if (ret.code) {
+        form.reset();
+        toast({
+          title: `${values.email} user create success.`,
+        });
+        router.push("/dashboard");
+        router.refresh();
+        return;
+      }
 
-      toast({
-        title: `${values.email} user create success.`,
-        // variant: "default",
-      });
-    } else {
       toast({
         title: ret.msg,
-        // description: "Perhaps you signed up with another method?",
         variant: "destructive",
       });
+    } finally {
+      setPending(false);
     }
-
-    // const ret = await new Promise((resolve, reject) => {
-    //   setTimeout(() => {
-    //     console.log(values);
-    //     console.log("form", pending);
-    //     setPending(false);
-    //     resolve("Hello world!");
-    //   }, 3000);
-    // });
   }
   return (
     <div className="w-full h-svh ">
@@ -129,7 +125,7 @@ export default function SignUpForm() {
                 </Button>
               </div>
               <div className="mt-4 text-center text-sm">
-                Don&apos;t have an account?{" "}
+                Already have an account?{" "}
                 <Link href="/sign-in" className="underline">
                   Sign In
                 </Link>

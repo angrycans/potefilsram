@@ -16,6 +16,9 @@ export async function signUpWithCredentials({ email, password }: SignUpWithCrede
       passwordHash: hashedPassword,
     });
 
+    // 注册成功后自动登录
+    await signIn("credentials", { email: user.email, password, redirect: false });
+
     return { code: 1, data: { email: user.email } };
   } catch (error) {
     return { code: 0, msg: (error as Error).message };
